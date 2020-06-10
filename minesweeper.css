@@ -1,0 +1,28 @@
+#MineSweeper {
+    width: 500px;
+     height:550px;
+      border:1px grey solid; 
+  }
+  #ScoreBoard {
+      display: block;
+      width: 100%;
+  }
+  #Menu {
+      display: block;
+  }
+#Grid {
+
+}
+.box {
+display: inline-block;
+margin-bottom: -4px;
+width: 30px;
+height: 30px;
+border: 1px grey solid;
+}
+.box:hover {
+background:green;
+}
+._25pct {
+width: 25%;
+}

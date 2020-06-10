@@ -1,2 +1,7 @@
 # MINESWEEPER
-Felt like coding minesweeper in OOP style
+Felt like coding minesweeper OOP style
+
+view live in CODEPEN link https://codepen.io/djtinkers365/pen/bGEdyQK
+
+
+
