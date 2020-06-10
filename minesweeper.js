@@ -41,7 +41,7 @@ class MineSweeper {
     }
     loadMainHTML(){
       document.getElementById('MineSweeper').innerHTML = `
-        <h1>MineSweeper</h1>
+        <h1>MineSweeper Exposed</h1>
         <div id="ScoreBoard"></div>
         <div id="Menu"></div>
         <div id="Grid"></div>
@@ -89,15 +89,15 @@ class MineSweeper {
         if (c === 0) {
           continue;
         } else {
-          /*top left*/      mines += (0 === this.grid.getN(i-this.width-1));
-          /*top center*/    mines += (0 === this.grid.getN(i-this.width-1));
-          /*top right*/     mines += (0 === this.grid.getN(i-this.width-1));
+          /*top left*/      mines += (0 === this.grid.getN((i-this.width)-1));
+          /*top center*/    mines += (0 === this.grid.getN((i-this.width)));
+          /*top right*/     mines += (0 === this.grid.getN((i-this.width)+1));
           /*center left*/   mines += (0 === this.grid.getN(i-1));
           /*center*/        mines += (0 === this.grid.getN(i));  
           /*center right*/  mines += (0 === this.grid.getN(i+1));
-          /*bottom left*/   mines += (0 === this.grid.getN(i+this.width-1));
+          /*bottom left*/   mines += (0 === this.grid.getN((i+this.width)-1));
           /*bottom center*/ mines += (0 === this.grid.getN(i+this.width));
-          /*bottom right*/  mines += (0 === this.grid.getN(i+this.width+1));
+          /*bottom right*/  mines += (0 === this.grid.getN((i+this.width)+1));
         }
         this.grid.assignValue(i,mines);
       }
