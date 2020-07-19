@@ -56,38 +56,62 @@ class MineSweeper {
     }
     loadMenu(){
       this.menu = new Menu({
-        new:   {id:"new",  class:"_25pct",title:"new",  onClick:this.newGame},
-        reset: {id:"reset",class:"_25pct",title:"reset",onClick:this.resetGame},
-        flag:  {id:"flag", class:"_25pct",title:"flag", onClick:function(){this.onMark = this.flag}},
-        dig:   {id:"dig",  class:"_25pct",title:"dig",  onClick:function(){this.onMark = this.dig}}
+        // new:   {id:"new",  class:"_25pct",title:"new",  onClick:this.newGame},
+        // reset: {id:"reset",class:"_25pct",title:"reset",onClick:this.resetGame},
+        // flag:  {id:"flag", class:"_25pct",title:"flag", onClick:function(){this.onMark = this.flag}},
+        // dig:   {id:"dig",  class:"_25pct",title:"dig",  onClick:function(){this.onMark = this.dig}}
       });
     }
     loadGrid(){
       this.grid = new Grid({
-        width:  15,
-        height: 12,
+        width:  this.width,
+        height: this.height,
         onClick: this.onMark
       });
     }
     layMines(){
-      let nMines = Math.round(this.lim / 6);
+      let nMines = Math.round(this.lim / 2);
       let b;
-      let cnt = 1;
+      let cnt = this.lim;
       while (nMines !== 0) {
-        if (cnt >= this.lim) cnt = 0;
-        b = Boolean(Math.round(Math.random()*2));
-        if (!b) this.grid.assignValue(cnt,0),nMines--;
-        cnt++;
+          if (!cnt) {
+            cnt = this.lim;
+          } else {
+            b = Boolean(Math.round(Math.random()*2));
+            if ((!b) && (this.grid.getN(cnt) !== 0)) {
+              this.grid.assignValue(cnt,0),nMines--;
+            }
+            cnt--;
+          }
       }
     }
     layNumbers(){
       let mines;
       let c;
-      for (let i = 1; i <= this.lim; i++) {
-        c = this.grid.getN(i);
+      // lay top border 
+      // lay bottom border
+      // lay left border
+      // lay right border
+      // lay non border grids
+      topBorder: for (let i = 1; i <= this.width; i++) {
+          mines = 0;
+          if (this.grid.getN(i) === 0) {
+            console.log("mine found");
+          } else {
+          /*center left*/   mines += (0 === this.grid.getN(i-1));
+          /*center*/        mines += (0 === this.grid.getN(i));  
+          /*center right*/  mines += (0 === this.grid.getN(i+1));
+          /*bottom left*/   mines += (0 === this.grid.getN((i+this.width)-1));
+          /*bottom center*/ mines += (0 === this.grid.getN(i+this.width));
+          /*bottom right*/  mines += (0 === this.grid.getN((i+this.width)+1));
+            if (mines === 0) this.grid.assignValue(i," "),console.log("pass");
+            else             this.grid.assignValue(i,mines);
+          }
+      }
+      bottomBorder: for (let i = this.width * (this.height-1); i <= this.lim; i++) {
         mines = 0;
-        if (c === 0) {
-          continue;
+        if (this.grid.getN(i) === 0) {
+          console.log("mine found");
         } else {
           /*top left*/      mines += (0 === this.grid.getN((i-this.width)-1));
           /*top center*/    mines += (0 === this.grid.getN((i-this.width)));
@@ -95,12 +119,68 @@ class MineSweeper {
           /*center left*/   mines += (0 === this.grid.getN(i-1));
           /*center*/        mines += (0 === this.grid.getN(i));  
           /*center right*/  mines += (0 === this.grid.getN(i+1));
-          /*bottom left*/   mines += (0 === this.grid.getN((i+this.width)-1));
+          if (mines === 0) this.grid.assignValue(i," "),console.log("pass");
+          else             this.grid.assignValue(i,mines);
+        }
+      }
+      leftBorder: for (let i = this.width+1; i <= this.width * (this.height-2) + 1; i += this.width) {
+        mines = 0;
+        if (this.grid.getN(i) === 0) {
+          console.log("mine found");
+        } else {
+          /*top center*/    mines += (0 === this.grid.getN((i-this.width)));
+          /*top right*/     mines += (0 === this.grid.getN((i-this.width)+1));
+          /*center*/        mines += (0 === this.grid.getN(i));  
+          /*center right*/  mines += (0 === this.grid.getN(i+1));
           /*bottom center*/ mines += (0 === this.grid.getN(i+this.width));
           /*bottom right*/  mines += (0 === this.grid.getN((i+this.width)+1));
+          if (mines === 0) this.grid.assignValue(i," "),console.log("pass");
+          else             this.grid.assignValue(i,mines);
         }
-        this.grid.assignValue(i,mines);
       }
+      rightBorder: for (let i = this.width*2; i <= this.width * (this.height-1); i+= this.width) {
+        mines = 0;
+        if (this.grid.getN(i) === 0) {
+          console.log("mine found");
+        } else {
+          /*top left*/      mines += (0 === this.grid.getN((i-this.width)-1));
+          /*top center*/    mines += (0 === this.grid.getN((i-this.width)));
+          /*center left*/   mines += (0 === this.grid.getN(i-1));
+          /*center*/        mines += (0 === this.grid.getN(i));  
+          /*bottom left*/   mines += (0 === this.grid.getN((i+this.width)-1));
+          /*bottom center*/ mines += (0 === this.grid.getN(i+this.width));
+          if (mines === 0) this.grid.assignValue(i," "),console.log("pass");
+          else             this.grid.assignValue(i,mines);
+        }
+      }
+    setTimeout(function(){
+      nonBorders: for (let j = 1; j < this.height; j++) {
+                    for (let k = 2; k < this.width; k++) {
+
+                      let i = this.width * j + k;
+
+                      console.log(i)
+
+                      mines = 0;
+
+                      if (this.grid.getN(i) === 0) {
+                        console.log("mine found");
+                      } else {
+                      /*top left*/      mines += (0 === this.grid.getN((i-this.width)-1));
+                      /*top center*/    mines += (0 === this.grid.getN((i-this.width)));
+                      /*top right*/     mines += (0 === this.grid.getN((i-this.width)+1));
+                      /*center left*/   mines += (0 === this.grid.getN(i-1));
+                      /*center*/        mines += (0 === this.grid.getN(i));  
+                      /*center right*/  mines += (0 === this.grid.getN(i+1));
+                      /*bottom left*/   mines += (0 === this.grid.getN((i+this.width)-1));
+                      /*bottom center*/ mines += (0 === this.grid.getN(i+this.width));
+                      /*bottom right*/  mines += (0 === this.grid.getN((i+this.width)+1));
+                      if (mines === 0) this.grid.assignValue(i," "),console.log("pass");
+                      else             this.grid.assignValue(i,mines);
+                    }
+                  }
+      }
+    }.bind(this),4000);
     }
     tokenizeGrid(){
       /*
